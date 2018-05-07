@@ -1,0 +1,37 @@
+﻿@using Microsoft.Ajax.Utilities
+@using MonthlyExpense.Models
+@{
+    List<ExpenseModel> expenseList = ViewBag.ExpenseList;
+}
+
+    
+   <table id="tblExpense" class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th style="display: none">Expense Id</th>
+                <th>Expense Name</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+
+       <tbody>
+       @if (expenseList != null) { 
+       foreach (ExpenseModel aExpenseModel in expenseList)
+       {
+           <tr>
+               <td style="display: none">@aExpenseModel.ExpenseId</td>
+               <td>@aExpenseModel.ExpenseName</td>
+               <td>@aExpenseModel.ExpenseType</td>
+               <td>@aExpenseModel.DtExpense</td>
+               <td>@aExpenseModel.Amount</td>
+               <td>@aExpenseModel.Comment</td>
+           </tr>
+       }
+       }
+       </tbody>
+    </table>
+
+

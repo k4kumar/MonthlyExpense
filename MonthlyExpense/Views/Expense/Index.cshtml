@@ -1,0 +1,252 @@
+﻿@using MonthlyExpense.Models
+@model MonthlyExpense.Models.ExpenseModel
+@{
+    Layout = null;
+    List<ExpenseModel> expenseTypeList = ViewBag.ExpenseTypes;
+    string message = "";
+}
+
+<style>
+    fieldset {
+        border-radius: .2em;
+        border: 1px solid #cccccc;
+        padding: .5em;
+        -webkit-transition: border linear .2s, box-shadow linear .2s;
+        -moz-transition: border linear .2s, box-shadow linear .2s;
+        -o-transition: border linear .2s, box-shadow linear .2s;
+        transition: border linear .2s, box-shadow linear .2s;
+        margin-bottom: 10px;
+    }
+
+        fieldset:hover {
+            box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.5);
+        }
+
+    .blank-row {
+        margin: 5px;
+    }
+
+    .divForFull {
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: rgb(0, 0, 0);
+        z-index: 999;
+    }
+
+    .messageDiv {
+        z-index: 9999;
+        position: fixed;
+        top: 150px;
+        left: 35%;
+    }
+</style>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
+<link href="~/Content/css/font-awesome.css" rel="stylesheet" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@Html.AntiForgeryToken()
+
+<div class="divForFull" style="display:none"></div>
+
+<div class="messageDiv" style="display: none">
+    <div class="panel panel-primary">
+        <div class="panel panel-heading">Message</div>
+        <div class="panel panel-body messageBody">@message</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="panel panel-info">
+
+        <div class="panel" style="margin-bottom: 4px">
+            <h4>
+                <i class="fa fa-money" aria-hidden="true" style="margin-left: 10px"></i>&nbsp; Expense
+
+                <div id="loading" style="display: inline;">
+                    <div id="loadingGif" style="display: inline;">
+                        <img src="~/Content/loading.gif" style="height: 16px; display: inline;" />
+                    </div>
+                </div>
+            </h4>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-5">
+                <input type="text" id="txtLoad" class="datepicker form-control formInput" /> &nbsp;&nbsp;
+            </div>
+            <div class="col-1">
+
+            </div>
+
+            <div class="col">
+                <button class="fas fa-search btn btn-default" id="loadBtn">Load</button>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="partialGridDiv">
+                    <fieldset>
+                        
+                        <div class="partialDivData">
+                            @Html.Partial("_gridExpense")
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="frmExpenseDiv col">
+                <fieldset>
+
+                    <table class="table table-responsive table-hover">
+                        <tr>
+                            <td>@Html.LabelFor(m => m.ExpenseName)</td>
+                            <td>@Html.TextBoxFor(m => m.ExpenseName, new { @class = "form-control formInput" })</td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.DtExpense)</td>
+                            <td><input type="text" id="dtExpense" class="form-control formInput" /></td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.ExpenseType)</td>
+                            <td>
+                                <select id="ExpenseType" name="ExpenseType" class="form-control formInput">
+                                    <option value="">---Select An Option---</option>
+                                    @foreach (ExpenseModel aExpenseModel in expenseTypeList)
+                                    {
+                                        <option value="@aExpenseModel.ExpenseType">@aExpenseModel.ExpenseType</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.Amount)</td>
+                            <td>@Html.TextBoxFor(m => m.Amount, new { @class = "form-control formInput" })</td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.Comment)</td>
+                            <td>@Html.TextBoxFor(m => m.Comment, new { @class = "form-control formInput" })</td>
+                        </tr>
+
+                    </table>
+
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <div class="blank-row">
+
+    </div>
+
+    <div class="btnDiv row">
+        <div class="col-6">
+
+        </div>
+        <div class="col-1">
+            <button class="btn btn-default" id="saveBtn"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+        </div>
+        <div class="col-1">
+            <button class="btn btn-default" id="updateBtn"><i class="far fa-edit"></i>&nbsp;Update</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var date = new Date();
+        var month = months[date.getMonth()];
+        var year = date.getFullYear();
+        document.getElementById("txtLoad").value = month + '-' + year;
+        $("#loading").css("display", "none");
+    });
+
+    $("#dtExpense").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "dd-M-yy"
+    });
+
+    $("#saveBtn").click(function () {
+
+        var aExpenseModel = {
+            DtExpense: document.getElementById("dtExpense").value,
+            ExpenseType: document.getElementById("ExpenseType").value,
+            Amount: document.getElementById("Amount").value,
+            ExpenseName: document.getElementById("ExpenseName").value,
+            Comment: document.getElementById("Comment").value
+        };
+
+
+        $.ajax({
+            url: '/Expense/PrcSaveExpenseData',
+            type: 'POST',
+            dataType: 'json',
+            data: { bExpenseModel: aExpenseModel },
+            success: function (data) {
+                var result = parseInt(data);
+                if (result > 0) {
+                    clearAll();
+                    $(".messageBody").html("Data Successfully Saved");
+                    $(".divForFull").css("display", "block");
+                    $(".messageDiv").css("display","block");
+
+                    setTimeout(function() {
+                        $(".divForFull").fadeOut(1500);
+                        $(".messageDiv").fadeOut(1500);
+                    });
+                }
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+    });
+
+    $("#loadBtn").click(function () {
+        var dtLoad = '1-'+document.getElementById("txtLoad").value;
+        $(".partialDivData").html('');
+        $.ajax({
+            url: '/Expense/PrcGetExpenseList',
+            type: 'POST',
+            dataType: 'json',
+            data: { date: dtLoad },
+            success: function (data) {
+                alert("success");
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+
+    });
+
+    function clearAll() {
+        document.getElementById("dtExpense").value = "";
+        document.getElementById("ExpenseType").value = "";
+        document.getElementById("Amount").value = "";
+        document.getElementById("ExpenseName").value = "";
+        document.getElementById("Comment").value = "";
+    }
+
+
+</script>
