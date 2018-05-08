@@ -27,6 +27,7 @@
     }
 
     .divForFull {
+        position: fixed;
         top: 0;
         bottom: 0;
         right: 0;
@@ -43,35 +44,47 @@
         top: 150px;
         left: 35%;
     }
+    
+    .container {
+        margin-top: 20px;
+    }
+
+    .row {
+        padding: 10px 20px;
+    }
 </style>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
 <link href="~/Content/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+
 @Html.AntiForgeryToken()
 
 <div class="divForFull" style="display:none"></div>
 
 <div class="messageDiv" style="display: none">
-    <div class="panel panel-primary">
-        <div class="panel panel-heading">Message</div>
-        <div class="panel panel-body messageBody">@message</div>
+    <div class="card">
+        <div class="card card-header bg-success text-white">Message</div>
+        <div class="card card-body messageBody">@message</div>
     </div>
 </div>
 
 <div class="container">
-    <div class="panel panel-info">
+    <div class="card card-success">
 
-        <div class="panel" style="margin-bottom: 4px">
-            <h4>
-                <i class="fa fa-money" aria-hidden="true" style="margin-left: 10px"></i>&nbsp; Expense
+        <div class="card" style="margin-bottom: 4px">
+            <div class="card card-header bg-secondary text-white">
+                <h4>
+                    <i class="fas fa-money-bill-alt" aria-hidden="true" style="margin-left: 10px"></i>&nbsp; Expense
 
-                <div id="loading" style="display: inline;">
-                    <div id="loadingGif" style="display: inline;">
-                        <img src="~/Content/loading.gif" style="height: 16px; display: inline;" />
+                    <div id="loading" style="display: inline;">
+                        <div id="loadingGif" style="display: inline;">
+                            <img src="~/Content/loading.gif" style="height: 16px; display: inline;" />
+                        </div>
                     </div>
-                </div>
-            </h4>
+                </h4>
+            </div>
         </div>
 
 
@@ -85,7 +98,7 @@
             </div>
 
             <div class="col">
-                <button class="fas fa-search btn btn-default" id="loadBtn">Load</button>
+                <button class="fas fa-search btn btn-default" id="loadBtn">&nbsp;&nbsp;Load</button>
             </div>
 
         </div>
@@ -94,7 +107,7 @@
             <div class="col">
                 <div class="partialGridDiv">
                     <fieldset>
-                        
+
                         <div class="partialDivData">
                             @Html.Partial("_gridExpense")
                         </div>
@@ -108,12 +121,12 @@
                     <table class="table table-responsive table-hover">
                         <tr>
                             <td>@Html.LabelFor(m => m.ExpenseName)</td>
-                            <td>@Html.TextBoxFor(m => m.ExpenseName, new { @class = "form-control formInput" })</td>
+                            <td>@Html.TextBoxFor(m => m.ExpenseName, new {@class = "form-control formInput"})</td>
                         </tr>
 
                         <tr>
                             <td>@Html.LabelFor(m => m.DtExpense)</td>
-                            <td><input type="text" id="dtExpense" class="form-control formInput" /></td>
+                            <td><input type="text" id="dtExpense" class="form-control formInput"/></td>
                         </tr>
 
                         <tr>
@@ -131,12 +144,12 @@
 
                         <tr>
                             <td>@Html.LabelFor(m => m.Amount)</td>
-                            <td>@Html.TextBoxFor(m => m.Amount, new { @class = "form-control formInput" })</td>
+                            <td>@Html.TextBoxFor(m => m.Amount, new {@class = "form-control formInput"})</td>
                         </tr>
 
                         <tr>
                             <td>@Html.LabelFor(m => m.Comment)</td>
-                            <td>@Html.TextBoxFor(m => m.Comment, new { @class = "form-control formInput" })</td>
+                            <td>@Html.TextBoxFor(m => m.Comment, new {@class = "form-control formInput"})</td>
                         </tr>
 
                     </table>
@@ -144,23 +157,33 @@
                 </fieldset>
             </div>
         </div>
-    </div>
 
-    <div class="blank-row">
-
-    </div>
-
-    <div class="btnDiv row">
-        <div class="col-6">
+        <div class="blank-row">
 
         </div>
-        <div class="col-1">
-            <button class="btn btn-default" id="saveBtn"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+
+
+        <div class="btnDiv row">
+            <div class="col-6">
+
+            </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="saveBtn"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="updateBtn"><i class="far fa-edit"></i>&nbsp;Update</button>
+            </div>
         </div>
-        <div class="col-1">
-            <button class="btn btn-default" id="updateBtn"><i class="far fa-edit"></i>&nbsp;Update</button>
+
+        <div class="blank-row">
+
         </div>
+        <div class="blank-row">
+
+        </div>
+
     </div>
+
 </div>
 
 
