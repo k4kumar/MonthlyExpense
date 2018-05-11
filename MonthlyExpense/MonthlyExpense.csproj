@@ -44,6 +44,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fluentx, Version=5.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fluentx.5.0.3\lib\net461\Fluentx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fluentx.Mvc, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fluentx.Mvc.1.0.4\lib\Fluentx.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -219,6 +227,8 @@
     <Content Include="Content\css\font-awesome.css" />
     <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Content\jquery.mCustomScrollbar.min.css" />
     <Content Include="Content\loading.gif" />
     <Content Include="favicon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

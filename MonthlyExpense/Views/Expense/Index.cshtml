@@ -52,13 +52,22 @@
     .row {
         padding: 10px 20px;
     }
+
+    .mCustomScrollbar {
+        height: 350px;
+      
+    }
+
+    .partialDivData #tblExpense {
+        display: table;
+    }
 </style>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
 <link href="~/Content/css/font-awesome.css" rel="stylesheet" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
-
+<link href="~/Content/jquery.mCustomScrollbar.min.css" rel="stylesheet" />
 @Html.AntiForgeryToken()
 
 <div class="divForFull" style="display:none"></div>
@@ -90,7 +99,7 @@
 
         <div class="row">
 
-            <div class="col-5">
+            <div class="col-4">
                 <input type="text" id="txtLoad" class="datepicker form-control formInput" /> &nbsp;&nbsp;
             </div>
             <div class="col-1">
@@ -104,11 +113,11 @@
         </div>
 
         <div class="row">
-            <div class="col">
+            <div class="col-7">
                 <div class="partialGridDiv">
                     <fieldset>
 
-                        <div class="partialDivData">
+                        <div class="partialDivData mCustomScrollbar">
                             @Html.Partial("_gridExpense")
                         </div>
                     </fieldset>
@@ -164,7 +173,7 @@
 
 
         <div class="btnDiv row">
-            <div class="col-6">
+            <div class="col-7">
 
             </div>
             <div class="col-1">
@@ -192,6 +201,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="~/Content/jquery.mCustomScrollbar.concat.min.js"></script>
 <script>
 
     $(document).ready(function () {
@@ -201,6 +211,11 @@
         var year = date.getFullYear();
         document.getElementById("txtLoad").value = month + '-' + year;
         $("#loading").css("display", "none");
+
+        $(".tblExpense").mCustomScrollbar({
+            theme: "inset-2-dark",
+            autoHideScrollbar:"true"
+        });
     });
 
     $("#dtExpense").datepicker({
@@ -246,20 +261,17 @@
     });
 
     $("#loadBtn").click(function () {
-        var dtLoad = '1-'+document.getElementById("txtLoad").value;
-        $(".partialDivData").html('');
-        $.ajax({
-            url: '/Expense/PrcGetExpenseList',
-            type: 'POST',
-            dataType: 'json',
-            data: { date: dtLoad },
-            success: function (data) {
-                alert("success");
-            },
-            error: function () {
-                alert('error');
-            }
-        });
+        var dtLoad = '1-' + document.getElementById("txtLoad").value;
+        if (dtLoad.length === 0) {
+            alert("please select a date");
+        }
+       
+        else
+        {
+            $("#tblExpense").load('@Url.Action("PrcGetExpenseList", "Expense")' + '?date=' + dtLoad, function () {
+                
+            });
+        }
 
     });
 
