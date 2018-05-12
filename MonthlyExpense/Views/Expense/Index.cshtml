@@ -61,6 +61,10 @@
     .partialDivData #tblExpense {
         display: table;
     }
+
+    .selected{
+        background-color: skyblue;
+    }
 </style>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
@@ -273,6 +277,14 @@
             });
         }
 
+    });
+
+    $('#tblExpense tr').dblclick(function () {
+        $(this).addClass('selected').siblings().removeClass('selected');  
+        var aExpense = {
+            ExpenseId:$(this).find("td").eq(0).html(),
+            ExpenseName:$(this).find("td").eq(1).html()
+        }
     });
 
     function clearAll() {
