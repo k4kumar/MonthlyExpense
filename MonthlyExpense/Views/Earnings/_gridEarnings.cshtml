@@ -1,0 +1,39 @@
+﻿@using Fluentx
+@using Microsoft.Ajax.Utilities
+@using MonthlyExpense.Models
+@{
+    List<EarningsModel> earningsList = ViewBag.EarningsList;
+}
+
+
+<table id="tblEarnings" class="table table-hover table-responsive" onmousedown="return false()" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; -o-user-select: none;">
+    <thead>
+
+        <tr>
+            <th style="display: none">Earnings Id</th>
+            <th>Source</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Outstanding Amount</th>
+            <th>Comment</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (earningsList.IsNotNull())
+        {
+            foreach (EarningsModel aEarningsModel in earningsList)
+            {
+                <tr>
+                    <td style="display: none">@aEarningsModel.ID</td>
+                    <td>@aEarningsModel.Source</td>
+                    <td>@aEarningsModel.Amount</td>
+                    <td>@aEarningsModel.DtEarn</td>
+                    <td>@aEarningsModel.OutstandingAmount</td>
+                    <td>@aEarningsModel.Comment</td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>

@@ -186,6 +186,12 @@
             <div class="col-1">
                 <button class="btn btn-default" id="updateBtn"><i class="far fa-edit"></i>&nbsp;Update</button>
             </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="resetBtn" onclick="clearAll()"><i class="fas fa-recycle"></i>&nbsp;Reset</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="deleteBtn"><i class="fas fa-trash"></i>&nbsp;Delete</button>
+            </div>
         </div>
 
         <div class="blank-row">
@@ -279,13 +285,41 @@
 
     });
 
-    $('#tblExpense tr').dblclick(function () {
+    $(document).on("dblclick", "#tblExpense tr", function () {
         $(this).addClass('selected').siblings().removeClass('selected');  
         var aExpense = {
-            ExpenseId:$(this).find("td").eq(0).html(),
-            ExpenseName:$(this).find("td").eq(1).html()
+            ExpenseId: $(this).find("td").eq(0).html(),
+            ExpenseName: $(this).find("td").eq(1).html(),
+            ExpensType: $(this).find("td").eq(2).html(),
+            DtExpense: $(this).find("td").eq(3).html(),
+            Amount: $(this).find("td").eq(4).html(),
+            Comment: $(this).find("td").eq(5).html()
         }
+        $("#ExpenseName").val(aExpense.ExpenseName);
+        $("#DtExpense").val(aExpense.ExpenseName);
+        $("#ExpensType").text(aExpense.ExpensType);
+        $("#Amount").val(aExpense.Amount);
+        $("#Comment").val(aExpense.Comment);
     });
+
+    //$("#ExpenseTable").dblclick(function () {
+    //    $(this).addClass('selected').siblings().removeClass('selected');
+    //    var aExpense = {
+    //        ExpenseId: $(this).find("td").eq(0).html(),
+    //        ExpenseName: $(this).find("td").eq(1).html(),
+    //        ExpensType: $(this).find("td").eq(2).html(),
+    //        DtExpense: $(this).find("td").eq(3).html(),
+    //        Amount: $(this).find("td").eq(4).html(),
+    //        Comment: $(this).find("td").eq(5).html()
+    //    }
+    //    document.getElementById("ExpenseName").value = aExpense.ExpenseName;
+    //    document.getElementById("DtExpense").value = aExpense.DtExpense;
+    //    document.getElementById("Amount").value = aExpense.Amount;
+    //    document.getElementById("Comment").value = aExpense.Comment;
+
+    //});
+
+ 
 
     function clearAll() {
         document.getElementById("dtExpense").value = "";

@@ -1,5 +1,214 @@
-﻿@model MonthlyExpense.Models.EarningsModel
+﻿@using MonthlyExpense.Models
+@model MonthlyExpense.Models.EarningsModel
 @{
-    
+    Layout = null;
+    List<EarningsModel> earningsList = ViewBag.EarningsList;
+    string message = "";
 }
 
+
+<style>
+    fieldset {
+        border-radius: .2em;
+        border: 1px solid #cccccc;
+        padding: .5em;
+        -webkit-transition: border linear .2s, box-shadow linear .2s;
+        -moz-transition: border linear .2s, box-shadow linear .2s;
+        -o-transition: border linear .2s, box-shadow linear .2s;
+        transition: border linear .2s, box-shadow linear .2s;
+        margin-bottom: 10px;
+    }
+
+        fieldset:hover {
+            box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.5);
+        }
+
+    .blank-row {
+        margin: 5px;
+    }
+
+    .divForFull {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: rgb(0, 0, 0);
+        z-index: 999;
+    }
+
+    .messageDiv {
+        z-index: 9999;
+        position: fixed;
+        top: 150px;
+        left: 35%;
+    }
+
+    .container {
+        margin-top: 20px;
+    }
+
+    .row {
+        padding: 10px 20px;
+    }
+
+    .mCustomScrollbar {
+        height: 350px;
+    }
+
+    .partialDivData #tblExpense {
+        display: table;
+    }
+
+    .selected {
+        background-color: skyblue;
+    }
+</style>
+
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
+<link href="~/Content/css/font-awesome.css" rel="stylesheet" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+<link href="~/Content/jquery.mCustomScrollbar.min.css" rel="stylesheet"/>
+
+@Html.AntiForgeryToken()
+
+<div class="divForFull" style="display:none"></div>
+
+<div class="messageDiv" style="display: none">
+    <div class="card">
+        <div class="card card-header bg-success text-white">Message</div>
+        <div class="card card-body messageBody">@message</div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="card card-success">
+
+        <div class="card" style="margin-bottom: 4px">
+            <div class="card card-header bg-secondary text-white">
+                <h4>
+                    <i class="fas fa-money-bill-alt" aria-hidden="true" style="margin-left: 10px"></i>&nbsp; Expense
+
+                    <div id="loading" style="display: inline;">
+                        <div id="loadingGif" style="display: inline;">
+                            <img src="~/Content/loading.gif" style="height: 16px; display: inline;" />
+                        </div>
+                    </div>
+                </h4>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-4">
+                <input type="text" id="txtLoad" class="datepicker form-control formInput" /> &nbsp;&nbsp;
+            </div>
+            <div class="col-1">
+
+            </div>
+
+            <div class="col">
+                <button class="fas fa-search btn btn-default" id="loadBtn">&nbsp;&nbsp;Load</button>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-7">
+                <div class="partialGridDiv">
+                    <fieldset>
+
+                        <div class="partialDivData mCustomScrollbar">
+                            @Html.Partial("_gridEarnings")
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="frmExpenseDiv col">
+                <fieldset>
+
+                    <table class="table table-responsive table-hover">
+                        <tr>
+                            <td>@Html.LabelFor(m => m.Source)</td>
+                            <td>@Html.TextBoxFor(m => m.Source, new { @class = "form-control formInput" })</td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.DtEarn)</td>
+                            <td><input type="text" id="dtExpense" class="form-control formInput" /></td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.Amount)</td>
+                            <td>@Html.TextBoxFor(m=>m.Amount,new {@class="form-control formInput"})</td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.OutstandingAmount)</td>
+                            <td>@Html.TextBoxFor(m => m.OutstandingAmount, new { @class = "form-control formInput" })</td>
+                        </tr>
+
+                        <tr>
+                            <td>@Html.LabelFor(m => m.Comment)</td>
+                            <td>@Html.TextBoxFor(m => m.Comment, new { @class = "form-control formInput" })</td>
+                        </tr>
+
+                    </table>
+
+                </fieldset>
+            </div>
+        </div>
+
+        <div class="blank-row">
+
+        </div>
+
+
+        <div class="btnDiv row">
+            <div class="col-7">
+
+            </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="saveBtn"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="updateBtn"><i class="far fa-edit"></i>&nbsp;Update</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="resetBtn" onclick="clearAll()"><i class="fas fa-recycle"></i>&nbsp;Reset</button>
+            </div>
+            <div class="col-1">
+                <button class="btn btn-default" id="deleteBtn"><i class="fas fa-trash"></i>&nbsp;Delete</button>
+            </div>
+        </div>
+
+        <div class="blank-row">
+
+        </div>
+        <div class="blank-row">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script src="~/Content/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script>
+    
+</script>
