@@ -183,7 +183,7 @@
             <div class="col-1">
                 <button class="btn btn-default" id="saveBtn"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
             </div>
-            <div class="col-1">
+            <div class="col-1" style="margin-right:17px">
                 <button class="btn btn-default" id="updateBtn"><i class="far fa-edit"></i>&nbsp;Update</button>
             </div>
             <div class="col-1">
@@ -214,6 +214,7 @@
 <script src="~/Content/jquery.mCustomScrollbar.concat.min.js"></script>
 <script>
 
+    var id;
     $(document).ready(function () {
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         var date = new Date();
@@ -270,6 +271,76 @@
         });
     });
 
+
+    $("#updateBtn").click(function () {
+
+
+        var aExpenseModel = {
+            ExpenseId: id,
+            DtExpense: document.getElementById("dtExpense").value,
+            ExpenseType: document.getElementById("ExpenseType").value,
+            Amount: document.getElementById("Amount").value,
+            ExpenseName: document.getElementById("ExpenseName").value,
+            Comment: document.getElementById("Comment").value
+        };
+
+
+        $.ajax({
+            url: '/Expense/PrcUpdateExpenseData',
+            type: 'POST',
+            dataType: 'json',
+            data: { bExpenseModel: aExpenseModel },
+            success: function (data) {
+                var result = parseInt(data);
+                if (result > 0) {
+                    clearAll();
+                    $(".messageBody").html("Data Successfully Updated");
+                    $(".divForFull").css("display", "block");
+                    $(".messageDiv").css("display", "block");
+
+                    setTimeout(function () {
+                        $(".divForFull").fadeOut(1500);
+                        $(".messageDiv").fadeOut(1500);
+                    });
+
+                }
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+
+    });
+
+    $("#deleteBtn").click(function () {
+        alert(id);
+        $.ajax({
+            url: '/Expense/PrcDeleteExpenseData',
+            type: 'POST',
+            dataType: 'json',
+            data: { Id: id },
+            success: function (data) {
+                var result = parseInt(data);
+                if (result > 0) {
+                    clearAll();
+                    $(".messageBody").html("Data Deleted");
+                    $(".divForFull").css("display", "block");
+                    $(".messageDiv").css("display", "block");
+
+                    setTimeout(function () {
+                        $(".divForFull").fadeOut(1500);
+                        $(".messageDiv").fadeOut(1500);
+                    });
+
+                }
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+
+    });
+
     $("#loadBtn").click(function () {
         var dtLoad = '1-' + document.getElementById("txtLoad").value;
         if (dtLoad.length === 0) {
@@ -290,14 +361,15 @@
         var aExpense = {
             ExpenseId: $(this).find("td").eq(0).html(),
             ExpenseName: $(this).find("td").eq(1).html(),
-            ExpensType: $(this).find("td").eq(2).html(),
+            ExpenseType: $(this).find("td").eq(2).html(),
             DtExpense: $(this).find("td").eq(3).html(),
             Amount: $(this).find("td").eq(4).html(),
             Comment: $(this).find("td").eq(5).html()
         }
+        id = aExpense.ExpenseId;
         $("#ExpenseName").val(aExpense.ExpenseName);
-        $("#DtExpense").val(aExpense.ExpenseName);
-        $("#ExpensType").text(aExpense.ExpensType);
+        $("#dtExpense").val(aExpense.DtExpense);
+        $("#ExpenseType").val(aExpense.ExpenseType);
         $("#Amount").val(aExpense.Amount);
         $("#Comment").val(aExpense.Comment);
     });

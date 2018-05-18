@@ -75,6 +75,7 @@ namespace MonthlyExpense.Models
                 bExpenseModel.ExpenseName = Reader["ExpenseName"].ToString();
                 bExpenseModel.Amount = Convert.ToInt32(Reader["Amount"]);
                 bExpenseModel.DtExpense = Reader["DtExpense"].ToString();
+                bExpenseModel.Comment = Reader["Comments"].ToString();
                 expenseList.Add(bExpenseModel);
             }
             Reader.Close();
@@ -82,6 +83,30 @@ namespace MonthlyExpense.Models
             return expenseList;
         }
 
-        
+        public int PrcUpdateEarnings(ExpenseModel bExpenseModel)
+        {
+
+            Command = new SqlCommand(Query, Connection);
+            Connection.Open();
+            Query = "Update tblExpense set Amount='" + bExpenseModel.Amount + "',Comments='" + bExpenseModel.Comment + "',ExpenseType='" + bExpenseModel.ExpenseType + "'," +
+                    "ExpenseName='" + bExpenseModel.ExpenseName + "',DtExpense='" + bExpenseModel.DtExpense + "' where Id='" + bExpenseModel.ExpenseId + "'";
+            Command = new SqlCommand(Query, Connection);
+            int rowAffected = Command.ExecuteNonQuery();
+            Connection.Close();
+            return rowAffected;
+        }
+
+        public int PrcDeleteEarnings(int id)
+        {
+            Command = new SqlCommand(Query, Connection);
+            Connection.Open();
+            Query = "Delete tblExpense where Id='" + id + "'";
+            Command = new SqlCommand(Query, Connection);
+            int rowAffected = Command.ExecuteNonQuery();
+            Connection.Close();
+            return rowAffected;
+        }
+
+
     }
 }

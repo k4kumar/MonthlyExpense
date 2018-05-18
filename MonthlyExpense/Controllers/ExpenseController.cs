@@ -31,6 +31,18 @@ namespace MonthlyExpense.Controllers
             return Json(result);
         }
 
+        public ActionResult PrcUpdateExpenseData(ExpenseModel bExpenseModel)
+        {
+            int result = aExpenseModel.PrcUpdateEarnings(bExpenseModel);
+            return Json(result);
+        }
+
+        public ActionResult PrcDeleteExpenseData(int id)
+        {
+            int result = aExpenseModel.PrcDeleteEarnings(id);
+            return Json(result);
+        }
+
         public ActionResult PrcGetExpenseList(string date)
         {
             ViewBag.ExpenseList = aExpenseModel.PrcGetExpenseList(date);
