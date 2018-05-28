@@ -1,0 +1,38 @@
+﻿
+@using Fluentx
+@using Microsoft.Ajax.Utilities
+@using MonthlyExpense.Models
+@{
+    List<BudgetModel> budgetsList = ViewBag.BudgetsList;
+}
+
+
+<table id="tblBudget" class="table table-hover table-responsive" onmousedown="return false()" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; user-select: none; -o-user-select: none;">
+    <thead>
+
+        <tr>
+            <th style="display: none">Id</th>
+            <th>Expense Type</th>
+            <th>Amount</th>
+            <th>Month</th>
+            <th>Comment</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @if (budgetsList.IsNotNull())
+        {
+            foreach (BudgetModel aBudgetModel in budgetsList)
+            {
+                <tr>
+                    <td style="display: none">@aBudgetModel.ID</td>
+                    <td>@aBudgetModel.ExpenseType</td>
+                    <td>@aBudgetModel.Amount</td>
+                    <td>@aBudgetModel.BudgetMonth</td>
+                    <td>@aBudgetModel.Comment</td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>
